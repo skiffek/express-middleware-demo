@@ -12,8 +12,10 @@ RUN npm ci --no-fund --no-audit
 COPY . ./
 RUN npm run build
 
+ARG NODE_ENV=production
+RUN test '${NODE_ENV}}' = 'production' && npm prune --production
+
 VOLUME [ "/application" ]
 EXPOSE 8080
 
-ARG NODE_ENV=production
 CMD [ "npm", "start" ]

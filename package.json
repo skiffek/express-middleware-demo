@@ -21,7 +21,7 @@
 		"debug": "node --inspect -r ts-node/register src/server",
 		"watch": "nodemon -w src -e ts,js,json -x ts-node src/server",
 		"lint": "eslint src",
-		"test": "mocha"
+		"test": "mocha -pA -j 4 --recursive -r ts-node/register -r source-map-support/register --extension js,ts"
 	},
 	"dependencies": {
 		"express": "^4.17.1"

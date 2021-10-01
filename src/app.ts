@@ -11,7 +11,6 @@ export default (function (this: Application): Application {
 
 	// this.use(express.json());
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	this.use((req, res, next) => {
 		// next();
 		// res.end();

@@ -10,4 +10,40 @@
 	- https://github.com/senchalabs/connect
 	- Connect is an extensible HTTP server framework for node using "plugins" known as _middleware_.
 	- Allows you to "plugin" handlers into the `(req, res) => { res.end(); }` server function using `.use()`
-	- 
+	- `connect()` create function `(req, res) => {}` that can be used with `http.createServer()`
+
+- Express
+	- https://github.com/expressjs/express
+	- Builds upon (or did build upon) Connect
+	- More syntactic sugar and convenience functions, but same pattern
+
+- Middleware
+	- Add handlers to the stack with `.use(handler)`
+	- There can (and will) be multiple handlers!
+	- A handler can be asynchronous and take longer to finish!
+	- How to know if a handler fully served the request?
+		- Either call `res.end()` (we're done) or `next()` (nah, let the next handler do stuff)
+
+- Middleware stack
+	- Add multiple handlers at once with `.use(handler1, handler2, [handler3, handler4])`
+	- The middleware stack is traversed until someone calls `res.end()`
+		- If noone ends the request, it will stay dangling!
+	- Make a handler only handle a certain path with `.use(path, handler)`
+	- Make a handler only handle a certain method with `.METHOD(handler)`
+	- Mix and match
+	- Order is important!!!
+	- You can even add multiple handlers for the exact same method and path
+	- Call `next("route")` to end handling for the current route
+
+- Error handling
+	- Handlers are async... What if an error occurs inside the app logic? Where to put it?
+	- Just call `next(error)`
+	- The app will continue to traverse the middleware stack until it finds an error handler
+	- Error handlers have signature `(error, req, res, next) => {}` (`handler.length` is 4 instead of 2 or 3)
+	- Allows for central error handling (i.e. logging, error response format, ...)
+
+- Router/Sub-Apps
+	- Create a sub-app with `express.Router`
+	- `express()` is in fact a router, with extra functionallity
+	- You could also do `app.use(express())` to mount a complete express app
+	- Calling `next("router")` will end handling for the current router
